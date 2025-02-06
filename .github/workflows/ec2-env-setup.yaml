@@ -21,12 +21,11 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           aws-region: ap-northeast-1
-      - name: Retrieve Value from Parameter Store
-        id: get-value
-        uses: aws-actions/aws-ssm-parameter-store-action@v1
-        with:
-          name: sample-environment-value
-          with-decryption: true
+      - name: Retrieve DB_NAME from Parameter Store
+        id: get-db-name
+        run: |
+          DB_NAME=$(aws ssm get-parameter --name "sample-environment-value" --with-decryption --query "Parameter.Value" --output text)
+          echo "DB_NAME=$DB_NAME" >> $GITHUB_ENV
       - name: Execute SSM Run Command
         run: |
           aws ssm send-command \
@@ -37,7 +36,7 @@ jobs:
           DB_HOST=hoge
           DB_USER=fuga
           DB_PASSWORD=moge
-          DB_NAME=${{ steps.get-value.outputs.value }}
+          DB_NAME=$DB_NAME
           EOF"
           ]' \
             --comment "Create .env file with DB credentials" \
