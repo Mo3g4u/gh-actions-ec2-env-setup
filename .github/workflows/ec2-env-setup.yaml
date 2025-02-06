@@ -27,12 +27,12 @@ jobs:
             --instance-ids ${{ secrets.EC2_INSTANCE_ID }} \
             --document-name "AWS-RunShellScript" \
             --parameters commands='[
-              "cat <<EOF > /home/ssm-user/.env
-            DB_HOST=hoge
-            DB_USER=fuga
-            DB_PASSWORD=moge
-            DB_NAME=piyo
-            EOF"
-            ]' \
+          "cat <<EOF > /home/ssm-user/.env
+          DB_HOST=hoge
+          DB_USER=fuga
+          DB_PASSWORD=moge
+          DB_NAME=piyo
+          EOF"
+          ]' \
             --comment "Create .env file with DB credentials" \
             --timeout-seconds 600
