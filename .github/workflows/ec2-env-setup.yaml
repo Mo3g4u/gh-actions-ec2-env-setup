@@ -21,6 +21,12 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           aws-region: ap-northeast-1
+      - name: Retrieve Value from Parameter Store
+        id: get-value
+        uses: aws-actions/aws-ssm-parameter-store-action@v1
+        with:
+          name: sample-environment-value
+          with-decryption: true
       - name: Execute SSM Run Command
         run: |
           aws ssm send-command \
@@ -31,7 +37,7 @@ jobs:
           DB_HOST=hoge
           DB_USER=fuga
           DB_PASSWORD=moge
-          DB_NAME=piyo
+          DB_NAME=${{ steps.get-value.outputs.value }}
           EOF"
           ]' \
             --comment "Create .env file with DB credentials" \
