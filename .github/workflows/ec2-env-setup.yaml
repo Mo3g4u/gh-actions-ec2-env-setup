@@ -21,11 +21,15 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           aws-region: ap-northeast-1
+      - name: Define environment variables
+        run: |
+          echo "DATABASE_URL=hoge" >> env_vars.txt
+          echo "API_KEY=fuga" >> env_vars.txt
+          # 必要に応じて他の環境変数も追加
       - name: Create and upload .env file to EC2
         run: |
           # Create the .env file content
-          ENV_CONTENT="DATABASE_URL=hoge\nAPI_KEY=fuga\n"
-          # Add more environment variables as needed
+          ENV_CONTENT=$(cat env_vars.txt)
             
           # Send the command to create the .env file on the EC2 instance
           aws ssm send-command \
