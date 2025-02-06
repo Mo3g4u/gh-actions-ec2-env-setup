@@ -27,12 +27,9 @@ jobs:
             --instance-ids ${{ secrets.EC2_INSTANCE_ID }} \
             --document-name "AWS-RunShellScript" \
             --parameters commands='[
-          "DB_NAME=$(aws ssm get-parameter --name \"sample-environment-value\" --with-decryption --query \"Parameter.Value\" --output text)",
+          "ENV_VALUE=$(aws ssm get-parameter --name \"sample-environment-value\" --with-decryption --query \"Parameter.Value\" --output text)",
           "cat <<EOF > /home/ssm-user/.env
-          DB_HOST=hoge
-          DB_USER=fuga
-          DB_PASSWORD=moge
-          DB_NAME=$DB_NAME
+          ENV_VALUE=$ENV_VALUE
           EOF"
           ]' \
             --comment "Create .env file with DB credentials" \
