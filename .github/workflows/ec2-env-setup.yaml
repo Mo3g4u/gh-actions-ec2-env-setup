@@ -33,5 +33,5 @@ jobs:
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
             --targets "Key=instanceids,Values=${{ secrets.EC2_INSTANCE_ID }}" \
-            --parameters 'commands=["#!/bin/bash", "echo -e \"$ENV_CONTENT\" > /home/ssm-user/.env"]' \
+            --parameters commands="echo -e '$ENV_CONTENT' > /home/ssm-user/.env" \
             --timeout-seconds 600
