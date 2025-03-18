@@ -25,11 +25,13 @@ jobs:
 
       - name: Retrieve information from Parameter Store
         run: |
-          echo "ENV_VALUE=$(aws ssm get-parameter --name "sample-environment-value" --with-decryption --query "Parameter.Value" --output text)" >> $GITHUB_ENV
+          VALUE=$(aws ssm get-parameter --name "sample-environment-value" --with-decryption --query "Parameter.Value" --output text)
+          echo "::add-mask::$VALUE"
+          echo "ENV_VALUE=$VALUE" >> $GITHUB_ENV
 
       - name: Check ENV_VALUE
         run: |
-          echo "ENV_VALUE: ${{ env.ENV_VALUE }}"
+          echo "ENV_VALUE value is masked: ${{ env.ENV_VALUE }}"
 
       - name: Execute SSM Run Command
         run: |
